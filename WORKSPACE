@@ -1,10 +1,10 @@
-workspace(name = "bazel-sample")
+workspace(name = "demo")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 # load rules_foreign_cc
 git_repository(
     name = "rules_foreign_cc",
-    remote = "https://github.com/bazelbuild/rules_foreign_cc",
+    remote = "https://gitee.com/mirrors_bazelbuild/rules_foreign_cc",
     commit = "d02390f1363cdd2ba5a7f7907a481503d483d569",
     shallow_since = "1616082096 +0000",
 #    branch = "0.2.0"
@@ -15,7 +15,7 @@ rules_foreign_cc_dependencies()
 # load gtest
 git_repository(
     name = "gtest",
-    remote = "https://github.com/google/googletest",
+    remote = "https://gitee.com/hejuncheng1/googletest",
     commit = "ba96d0b1161f540656efdaed035b3c062b60e006",
 #    branch = "release-1.10.x",
 )
@@ -23,7 +23,7 @@ git_repository(
 # load gflags
 git_repository(
     name = "gflags",
-    remote = "https://github.com/gflags/gflags",
+    remote = "https://gitee.com/anynone/gflags-gflags",
     branch = "v2.2.2",
 )
 
@@ -47,7 +47,7 @@ http_archive(
 # load protobuf
 git_repository(
     name = "com_google_protobuf",
-    remote = "https://github.com/protocolbuffers/protobuf",
+    remote = "https://gitee.com/anynone/protocolbuffers-protobuf",
     commit = "19fb89416f3fdc2d6668f3738f444885575285bc",
     shallow_since = "1610561587 -0800",
 #    branch = "4.0.x",
@@ -59,7 +59,7 @@ protobuf_deps()
 # load grpc
 git_repository(
     name = "com_github_grpc_grpc",
-    remote = "https://github.com/grpc/grpc",
+    remote = "https://gitee.com/anynone/grpc-grpc",
     commit = "257d0045ab958eb767a3591c88e9d0c2bdf4b916",
     shallow_since = "1611079677 -0800",
 #    branch = "v1.35.0",

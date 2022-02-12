@@ -1,11 +1,13 @@
-## bazel-sample
+## demo
 
 Provide a sample project for those people: 
 - use Linux
-- need C++ project (support clang and gcc)
+- need C++ project (support gcc)
 - need bazel construction
 - need gRPC and protobuf
 - need openssl (version 1.1.1+, or the better option is boringssl)
+- need {fmt} for formatting.
+- need sqlite3.
 - use Visual Studio Code (not have to)
 
 ---
@@ -44,10 +46,12 @@ git clone https://github.com/lty2226262/demo.git
 Open your VS Code, Click `File->Open` then choose this repo.
 ### Build All
 
-Open terminal in CLion and run
+Open terminal in VS Code and run
 
 ```bash
 bazel build //...
 ```
+
+Or 
 
 If you want to build and run a spec binary, just go to a `BUILD` file or `BUILD.bazel` file, click a green triangle, then this binary will show in your top-right corner.
