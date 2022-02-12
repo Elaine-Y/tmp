@@ -52,6 +52,10 @@ Open terminal in VS Code and run
 bazel build --cxxopt='-std=c++17' //...
 ```
 
-Or 
+### Test All
 
-If you want to build and run a spec binary, just go to a `BUILD` file or `BUILD.bazel` file, click a green triangle, then this binary will show in your top-right corner.
+Open terminal in VS Code and run
+
+```bash
+bazel test //...
+```

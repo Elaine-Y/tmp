@@ -56,6 +56,40 @@ git_repository(
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 protobuf_deps()
 
+# load googleapis
+git_repository(
+    name = "com_google_googleapis",
+    remote = "https://gitee.com/anynone/googleapis-googleapis",
+    commit = "411e51eea221af5b77f809cef2c6592df45f73d5",
+    shallow_since = "1614528000 -0800",
+)
+
+# Configure @com_google_googleapis to only compile C++ and gRPC libraries.
+load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_language")
+
+switched_rules_by_language(
+    name = "com_google_googleapis_imports",
+    cc = True,  # C++ support is only "Partially implemented", roll our own.
+    grpc = True,
+)
+
+# load rules proto
+http_archive(
+    name = "rules_proto",
+    sha256 = "602e7161d9195e50246177e7c55b2f39950a9cf7366f74ed5f22fd45750cd208",
+    strip_prefix = "rules_proto-97d8af4dc474595af3900dd85cb3a29ad28cc313",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_proto/archive/97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz",
+        "https://github.com/bazelbuild/rules_proto/archive/97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz",
+    ],
+)
+
+load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
+
+rules_proto_dependencies()
+
+rules_proto_toolchains()
+
 # load grpc
 git_repository(
     name = "com_github_grpc_grpc",

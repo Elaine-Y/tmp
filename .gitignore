@@ -1,6 +1,5 @@
-# CLion
-.idea/
-.clwb/
+# VS Code
+.vscode
 
 # bazel build progress
 bazel-bin
