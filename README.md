@@ -49,7 +49,7 @@ Open your VS Code, Click `File->Open` then choose this repo.
 Open terminal in VS Code and run
 
 ```bash
-bazel build //...
+bazel build --cxxopt='-std=c++17' //...
 ```
 
 Or 

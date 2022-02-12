@@ -4,6 +4,7 @@
 
 #include <gtest/gtest.h>
 
+#include <limits.h>
 #include "utils/basic.h"
 
 TEST(TestGTest, WorkCorrectly) {
