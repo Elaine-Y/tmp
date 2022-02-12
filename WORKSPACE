@@ -15,7 +15,7 @@ rules_foreign_cc_dependencies()
 # load gtest
 git_repository(
     name = "gtest",
-    remote = "https://gitee.com/hejuncheng1/googletest",
+    remote = "https://github.com/google/googletest",
     commit = "ba96d0b1161f540656efdaed035b3c062b60e006",
 #    branch = "release-1.10.x",
 )

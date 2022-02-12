@@ -22,9 +22,9 @@ In macOS, homebrew can only install the latest version, please use 3.7.1 for thi
 export BAZEL_VERSION=3.7.1
 mkdir -p ~/tmp
 cd ~/tmp
-curl -fLO "https://github.com/bazelbuild/bazel/releases/download/${BAZEL_VERSION}/bazel-${BAZEL_VERSION}-installer-darwin-x86_64.sh"
-chmod +x "bazel-${BAZEL_VERSION}-installer-darwin-x86_64.sh"
-./bazel-${BAZEL_VERSION}-installer-darwin-x86_64.sh --user
+curl -fLO "https://github.com/bazelbuild/bazel/releases/download/${BAZEL_VERSION}/bazel-${BAZEL_VERSION}-installer-linux-x86_64.sh"
+chmod +x "bazel-${BAZEL_VERSION}-installer-linux-x86_64.sh"
+./bazel-${BAZEL_VERSION}-installer-linux-x86_64.sh --user
 echo 'export PATH="$PATH:$HOME/bin"' >> ~/.bashrc
 source ~/.bashrc
 ```
