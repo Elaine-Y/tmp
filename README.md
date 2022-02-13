@@ -86,26 +86,8 @@ for client test
 
 #### CUrl
 
-install grpcurl first
-
-```bash
-mkdir -p ~/tmp
-cd ~/tmp
-wget https://github.com/fullstorydev/grpcurl/releases/download/v1.8.0/grpcurl_1.8.0_linux_x86_64.tar.gz
-mkdir -p ~/bin
-tar -zxvf grpcurl_1.8.0_linux_x86_64.tar.gz -C ~/bin
-echo 'export PATH="$PATH:$HOME/bin"' >> ~/.bashrc
-source ~/.bashrc
-```
-
-grpcurl format
+Not availiable now
 
 ```
-grpcurl -d '{<request data>}' -import-path {<proto path>} -proto {<proto filename>} {gRPC-Server:port} {proto package name}.{service name}/{method name}
-```
-
-grpcurl example
-
-```
-grpcurl -d '{"name":"Hello,Elaine"}' -import-path ~/workspace/demo/proto -proto hello.proto 49.235.109.193:50001/helloworld helloworld.Hello/GetKey
+curl http://49.235.109.193:50001/v3/pay/transactions/id/1217752501201407033233368018?mc
 ```
