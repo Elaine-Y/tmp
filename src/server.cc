@@ -47,16 +47,22 @@ public:
                 res = Status(grpc::ABORTED, ERROR_MSG_READ_DATA_FAIL);
                 break;
             }
-            if (req.name().empty()) {
+            if (req.out_trade_no().empty()) {
                 res = Status(grpc::ABORTED, ERROR_MSG_EMPTY_NAME);
                 break;
             }
-            fmt::print("server: get message \"{}\"\n", req.name().c_str());
-            fmt::print("server: start write message \"hello {}\" to stream\n", req.name().c_str());
+            if (req.mchid().empty()) {
+                res = Status(grpc::ABORTED, ERROR_MSG_EMPTY_NAME);
+                break;
+            }
+
+            fmt::print("server: get message \"{}\"\n", req.out_trade_no().c_str());
+            fmt::print("server: get message \"{}\"\n", req.mchid().c_str());
+            fmt::print("server: start write message \"hello {}\" to stream\n", req.out_trade_no().c_str());
             Response rsp;
-            rsp.set_message(fmt::format("hello {}, your is: {}", req.name(), deal_with_message(req.name())));
+            rsp.set_appid(fmt::format("hello {}:{}, your is: {}", req.out_trade_no(), req.mchid(), deal_with_message(req.out_trade_no())));
             stream->Write(rsp);
-            fmt::print("server: success write message \"hello {}\" to stream\n", req.name().c_str());
+            fmt::print("server: success write message \"hello {}\" to stream\n", req.out_trade_no().c_str());
         } while (false);
         fmt::print("server: done for client.\n");
         return res;

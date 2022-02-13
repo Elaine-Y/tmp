@@ -3,6 +3,6 @@
 
 # bazel build progress
 bazel-bin
-bazel-bazel-sample
+bazel-demo
 bazel-out
 bazel-testlogs

@@ -59,3 +59,53 @@ Open terminal in VS Code and run
 ```bash
 bazel test //...
 ```
+
+### Usage
+
+#### Server
+
+After built, run
+
+```bash
+cd bazel-bin/src
+./server
+```
+
+to launch server.
+
+#### Client
+
+run 
+
+```bash
+cd bazel-bin/src
+./client
+```
+
+for client test
+
+#### CUrl
+
+install grpcurl first
+
+```bash
+mkdir -p ~/tmp
+cd ~/tmp
+wget https://github.com/fullstorydev/grpcurl/releases/download/v1.8.0/grpcurl_1.8.0_linux_x86_64.tar.gz
+mkdir -p ~/bin
+tar -zxvf grpcurl_1.8.0_linux_x86_64.tar.gz -C ~/bin
+echo 'export PATH="$PATH:$HOME/bin"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+grpcurl format
+
+```
+grpcurl -d '{<request data>}' -import-path {<proto path>} -proto {<proto filename>} {gRPC-Server:port} {proto package name}.{service name}/{method name}
+```
+
+grpcurl example
+
+```
+grpcurl -d '{"name":"Hello,Elaine"}' -import-path ~/workspace/demo/proto -proto hello.proto 49.235.109.193:50001/helloworld helloworld.Hello/GetKey
+```

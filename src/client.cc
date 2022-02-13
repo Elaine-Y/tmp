@@ -29,12 +29,13 @@ public:
         ClientContext context;
         auto stream = stub_->GetKey(&context);
         Request req;
-        req.set_name(name);
+        req.set_out_trade_no(name);
+        req.set_mchid(name);
         fmt::print("client: start to send request to server: {}\n", name);
         stream->Write(req);
         Response res;
         stream->Read(&res);
-        fmt::print("client: receive from server: {}, {}\n", name, res.message());
+        fmt::print("client: receive from server: {}, {}\n", name, res.appid());
         stream->WritesDone();
         Status status = stream->Finish();
         if (!status.ok()) {
