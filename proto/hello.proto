@@ -2,19 +2,21 @@
 syntax = "proto3";
 package helloworld;
 
-import "google/api/annotations.proto";
+// import "google/api/annotations.proto";
+
+option go_package = "helloworld/gen";
 
 service Hello {
-  rpc GetKey(stream Request) returns (stream Response) {
-    option (google.api.http) = {
-      get: "v3/pay/transactions/out-trade-no/{out_trade_no}?mchid={mchid}"
-    };
+  rpc GetKey(Request) returns (Response) {
+    // option (google.api.http) = {
+      // get: "/v3/pay/transactions/out-trade-no/{out_trade_no}"
+    // };
   }
 }
 
 message Request {
-  string out_trade_no = 1;
-  string mchid = 2;
+  string out_trade_no = 1;  // Mapped to URL path 
+  string mchid = 2;         // Mapped to query parameter mchid
 }
 
 message Payer {

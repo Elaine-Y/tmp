@@ -7,7 +7,7 @@
 #include <vector>
 
 // lib outside
-#include <fmt/core.h>
+// #include <fmt/core.h>
 #include <grpcpp/grpcpp.h>
 
 // user lib
@@ -27,20 +27,17 @@ public:
 
     void GetRep(const std::string &name) {
         ClientContext context;
-        auto stream = stub_->GetKey(&context);
         Request req;
-        req.set_out_trade_no(name);
-        req.set_mchid(name);
-        fmt::print("client: start to send request to server: {}\n", name);
-        stream->Write(req);
         Response res;
-        stream->Read(&res);
-        fmt::print("client: receive from server: {}, {}\n", name, res.appid());
-        stream->WritesDone();
-        Status status = stream->Finish();
+        req.set_out_trade_no(name);
+        req.set_mchid(name + "66mc");
+        // fmt::print("client: start to send request to server: {}\n", name);
+        Status status = stub_->GetKey(&context, req, &res);
+        // fmt::print("client: receive from server: {}, {}\n", name, res.appid());
+
         if (!status.ok()) {
-            fmt::print("client: RPC failed, error code: {}, error message: {}.\n", status.error_code(),
-                       status.error_message());
+            // fmt::print("client: RPC failed, error code: {}, error message: {}.\n", status.error_code(),
+            //            status.error_message());
         }
     }
 

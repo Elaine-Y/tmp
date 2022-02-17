@@ -11,22 +11,22 @@ cc_library(
     deps = ["@sqlite3//:sqlite3"],
 )
 
-cc_library(
-    name = "ssl_test",
-    srcs = [
-        "ssl_util.cc",
-    ],
-    hdrs = [
-        "ssl_util.h",
-    ],
-    copts = [
-        "-O2",
-        "-std=c++17",
-    ],
-    deps = [
-        "//third_party/openssl:openssl",
-    ],
-)
+# cc_library(
+#     name = "ssl_test",
+#     srcs = [
+#         "ssl_util.cc",
+#     ],
+#     hdrs = [
+#         "ssl_util.h",
+#     ],
+#     copts = [
+#         "-O2",
+#         "-std=c++17",
+#     ],
+#     deps = [
+#         "//third_party/openssl:openssl",
+#     ],
+# )
 
 cc_library(
     name = "basic_lib",

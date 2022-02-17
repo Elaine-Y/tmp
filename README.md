@@ -16,7 +16,7 @@ Provide a sample project for those people:
 
 ### bazel
 
-In macOS, homebrew can only install the latest version, please use 3.7.1 for this repo.
+In Linux, use 3.7.1 for this repo.
 
 ```bash
 export BAZEL_VERSION=3.7.1
@@ -89,5 +89,5 @@ for client test
 Not availiable now
 
 ```
-curl http://49.235.109.193:50001/v3/pay/transactions/id/1217752501201407033233368018?mc
+curl http://49.235.109.193:50001/v3/pay/transactions/id/1217752501201407033233368018?mchid=1230000109
 ```
