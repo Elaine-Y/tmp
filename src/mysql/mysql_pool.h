@@ -60,8 +60,8 @@ class MysqlPool {
   virtual ~MysqlPool();
 
   bool init();  // 连接数据库，创建连接
-  MysqlConn* get_db_conn(const uint32_t timeout_ms = 0);  // 获取连接资源
-  void release_db_conn(MysqlConn* pConn);             // 归还连接资源
+  MysqlConn* get_db_conn(const int32_t timeout_ms = 0);  // 获取连接资源
+  void release_db_conn(MysqlConn* p_conn);             // 归还连接资源
 
   const char* get_pool_name() { return m_pool_name.c_str(); }
   const char* get_db_server_ip() { return m_db_server_ip.c_str(); }
@@ -85,4 +85,80 @@ class MysqlPool {
   std::mutex m_mutex;
   std::condition_variable m_cond_var;
   bool m_abort_request = false;
+};
+
+// SQL拼接 防注入
+class SqlConcat {
+ public:
+  class Split {
+    friend class SqlConcat;
+
+   public:
+    Split(const string& sql_str = "") {
+      if (!sql_str.empty()) {
+        split_str(sql_str, m_seg, "?");
+      }
+      for (auto seg:m_seg) {
+        std::cout << seg << std::endl;
+      }
+    }
+
+   private:
+    std::vector<std::string> m_seg;
+    void split_str(const string& str, std::vector<std::string>& ret,
+                   const std::string& sep = ",") {
+      int start = 0;
+      int end = str.find(sep);
+      string tmp;
+      while (end != -1) {
+        ret.push_back(str.substr(start, end - start));
+        start = end + sep.size();
+        end = str.find(sep, start);
+      }
+      ret.push_back(str.substr(start, end - start));
+    }
+  };
+
+  SqlConcat(std::ostringstream& ss, const Split& shared_split)
+      : m_ss(ss), m_seg(shared_split.m_seg), m_idx(0) {
+    ++*this;
+  }
+
+  ~SqlConcat() { check_range(); }
+
+  inline std::ostringstream& operator*() { return m_ss; }
+  inline std::ostringstream* operator->() { return &m_ss; }
+
+  inline void check_range() { assert(m_idx == m_seg.size()); }
+
+  template <typename T>
+  inline SqlConcat& operator<<(const T& arg) {
+    m_ss << arg;
+    return ++*this;
+  }
+  inline SqlConcat& operator<<(const std::string& str) {
+    m_ss << '\'' << str << '\'';
+    return ++*this;
+  }
+  inline SqlConcat& operator<<(const char* str) {
+    m_ss << '\'' << str << '\'';
+    return ++*this;
+  }
+  inline SqlConcat& operator<<(char* str) {
+    m_ss << '\'' << str << '\'';
+    return ++*this;
+  }
+  inline SqlConcat& operator<<(const void* str) {
+    m_ss << (const char*)str;
+    return ++*this;
+  }
+
+  inline SqlConcat& operator++() {
+    m_ss << m_seg[m_idx++];
+    return *this;
+  }
+
+  std::ostringstream& m_ss;
+  const std::vector<std::string>& m_seg;
+  uint32_t m_idx;
 };

@@ -109,4 +109,7 @@ message Response {
   
   // referring to https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_2_5.shtml
   repeated PromotionDetial promotion_detail = 14;
+  optional int32 err_code = 15;       // 业务错误码
+  optional string err_msg = 16;       // 业务错误信息
+
 }

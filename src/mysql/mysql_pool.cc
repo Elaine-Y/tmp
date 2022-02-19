@@ -118,7 +118,7 @@ MysqlPool::MysqlPool(const string& pool_name, const string& db_server_ip,
       m_db_max_conn_cnt(max_conn_cnt) {}
 
 MysqlPool::~MysqlPool() {
-  std::lock_guard<std::mutex> lock(m_mutex); // 加锁
+  std::lock_guard<std::mutex> lock(m_mutex);  // 加锁
   m_abort_request = true;
   m_cond_var.notify_all();  // 通知所有在等待的请求退出
 
@@ -136,7 +136,7 @@ bool MysqlPool::init() {
   // 创建固定的最小连接数
   for (uint32_t i = 0; i < m_db_cur_conn_cnt; ++i) {
     MysqlConn* db_conn = new MysqlConn(this);
-    if(!db_conn->init()) {
+    if (!db_conn->init()) {
       delete db_conn;
       db_conn = nullptr;
       return false;
@@ -146,10 +146,67 @@ bool MysqlPool::init() {
   return true;
 }
 
-MysqlConn* MysqlPool::get_db_conn(const uint32_t timeout_ms = 0) {
+MysqlConn* MysqlPool::get_db_conn(const int32_t timeout_ms = 0) {
+  std::unique_lock<std::mutex> lock(m_mutex);
+  if (m_abort_request) {
+    std::cout << "[INFO] have abort" << std::endl;
+    return nullptr;
+  }
+  if (m_free_list.empty()) {
+    // 没有连接可以用
+    if (m_db_cur_conn_cnt >= m_db_max_conn_cnt) {
+      if (timeout_ms <= 0) {
+        std::cout << "[INFO] wait ms:" << std::endl;
+        m_cond_var.wait(
+            lock, [this] { return (!m_free_list.empty()) | m_abort_request; });
+      } else {
+        m_cond_var.wait_for(
+            lock, std::chrono::milliseconds(timeout_ms),
+            [this] { return (!m_free_list.empty()) | m_abort_request; });
+        if (m_free_list.empty()) {
+          return nullptr;
+        }
+      }
+      if (m_abort_request) {
+        std::cout << "[INFO] have abort" << std::endl;
+        return nullptr;
+      }
+    } else {  // 没达到最大连接 创建连接
+      MysqlConn* db_conn = new MysqlConn(this);
+      int32_t ret = db_conn->init();
+      if (ret) {
+        std::cout << "[ERR] Init db connection failed." << std::endl;
+        delete db_conn;
+        db_conn = nullptr;
+        return nullptr;
+      } else {
+        m_free_list.push_back(db_conn);
+        m_db_cur_conn_cnt++;
+        std::cout << "[INFO] new db connection:" << m_pool_name
+                  << ", conn_cnt:" <
+            m_db_cur_conn_cnt << std::endl;
+      }
+    }
+  }
+  MysqlConn* p_conn = m_free_list.front();  // 获取连接
+  m_free_list.pop_front();
+  m_used_list.push_back(p_conn);
 
+  return p_conn;
 }
 
-void MysqlPool::release_db_conn(MysqlConn* pConn) {
-
+void MysqlPool::release_db_conn(MysqlConn* p_conn) {
+  std::lock_guard<std::mutex> lock(m_mutex);
+  for (auto it = m_free_list.begin(); it != m_free_list.end(); ++it) {
+    if (*it == p_conn) {
+      break;
+    }
+  }
+  if (it == m_free_list.end()) {
+    m_used_list.remove(p_conn);
+    m_free_list.push_back(p_conn);
+    c_cond_var.notify_one(); // 通知取队列
+  } else {
+    std::cout << "[ERR] release db conn failed." << std::endl;
+  }
 }
