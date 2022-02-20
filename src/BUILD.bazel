@@ -1,15 +1,28 @@
+cc_library(
+    name = "query_order",
+    srcs = ["query_order.cc"],
+    hdrs = ["query_order.h"],
+    deps = [
+        "//proto:hello_grpc",
+        "//utils:utils",
+        "//src/mysql:mysql_pool",
+        "@com_github_grpc_grpc//:grpc++",
+        "@com_github_grpc_grpc//:grpc++_reflection",
+    ],
+    linkopts = ['-ldl', '-lmysqlclient']
+)
+
 cc_binary(
     name = "server",
     srcs = ["server.cc"],
     deps = [
         "//proto:hello_grpc",
         "//utils:utils",
-        #"@fmtlib//:fmtlib",
+        ":query_order",
         "@com_github_grpc_grpc//:grpc++",
         "@com_github_grpc_grpc//:grpc++_reflection",
-        "@sqlite3//:sqlite3",
     ],
-    linkopts = ['-ldl']
+    linkopts = ['-ldl', '-lmysqlclient']
 )
 
 cc_binary(
@@ -18,7 +31,6 @@ cc_binary(
     deps = [
         "//proto:hello_grpc",
         "//utils:utils",
-        #"@fmtlib//:fmtlib",
         "@com_github_grpc_grpc//:grpc++",
         "@sqlite3//:sqlite3",
     ],

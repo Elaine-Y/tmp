@@ -19,5 +19,10 @@ class HelloImpl final : public Hello::Service {
 
  private:
   MysqlPool *m_db;
-  void deal_msg(const Request &req, Response* rsp);
+  // void deal_msg(const Request &req, Response* rsp, Status *ret);
+  Status deal_msg(const Request &req, Response* rsp);
+  void rsp_err(Response& rsp, int err_code, const std::string& err_msg) {
+    rsp.set_err_code(err_code);
+    rsp.set_err_msg(err_msg);
+  }
 };

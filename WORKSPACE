@@ -27,14 +27,6 @@ git_repository(
     branch = "v2.2.2",
 )
 
-# load sqlite3
-http_archive(
-    name = "sqlite3",
-    strip_prefix = "sqlite-bazel-6473349723a61ecf929a422795790bf657d86ed9",
-    urls = ["https://github.com/rockwotj/sqlite-bazel/archive/6473349723a61ecf929a422795790bf657d86ed9.zip"],
-    sha256 = "a04556cb10fe365329c673303b13c0e7a7ad4488767c8537d4e5e8ee0403031c",
-)
-
 ## load openssl
 all_content = """filegroup(name = "all", srcs = glob(["**"]), visibility = ["//visibility:public"])"""
 http_archive(
@@ -103,11 +95,19 @@ grpc_deps()
 load("@com_github_grpc_grpc//bazel:grpc_extra_deps.bzl", "grpc_extra_deps")
 grpc_extra_deps()
 
-# load fmtlib
+# load sqlite3
 http_archive(
-    name = "fmtlib",
-    url = "https://github.com/fmtlib/fmt/releases/download/8.0.0/fmt-8.0.0.zip",
-    strip_prefix = "fmt-8.0.0",
-    build_file = "//third_party/fmtlib:BUILD.bazel",
-    sha256 = "36016a75dd6e0a9c1c7df5edb98c93a3e77dabcf122de364116efb9f23c6954a",
+    name = "sqlite3",
+    strip_prefix = "sqlite-bazel-6473349723a61ecf929a422795790bf657d86ed9",
+    urls = ["https://github.com/rockwotj/sqlite-bazel/archive/6473349723a61ecf929a422795790bf657d86ed9.zip"],
+    sha256 = "a04556cb10fe365329c673303b13c0e7a7ad4488767c8537d4e5e8ee0403031c",
+)
+
+## load openssl
+all_content = """filegroup(name = "all", srcs = glob(["**"]), visibility = ["//visibility:public"])"""
+http_archive(
+    name = "openssl",
+    build_file_content = all_content,
+    strip_prefix = "openssl-OpenSSL_1_1_1i",
+    urls = ["https://github.com/openssl/openssl/archive/OpenSSL_1_1_1i.tar.gz"],
 )

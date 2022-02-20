@@ -1,21 +1,24 @@
 #pragma once
 
-#include <mysql.h>
-#include <stdint.h>
+#include <mysql/mysql.h>
+#include <assert.h>
 
 #include <condition_variable>
 #include <iostream>
+#include <sstream>
 #include <list>
 #include <map>
 #include <mutex>
 #include <string>
+#include <vector>
 
+using std::list;
 using std::string;
-
 
 // 返回结果 select的时候用
 class ResultSet {
  public:
+  ResultSet(){}
   ResultSet(MYSQL_RES* res);
   virtual ~ResultSet();
 
@@ -40,9 +43,9 @@ class MysqlConn {
   bool init();
 
   // 查询
-  ResultSet do_query(const string& sql);
+  ResultSet* do_query(const string& sql);
   // 获取连接池名
-  const string& get_pool_name();
+  const string get_pool_name();
   MYSQL* get_mysql() { return m_mysql; }
 
  private:
@@ -97,9 +100,6 @@ class SqlConcat {
     Split(const string& sql_str = "") {
       if (!sql_str.empty()) {
         split_str(sql_str, m_seg, "?");
-      }
-      for (auto seg:m_seg) {
-        std::cout << seg << std::endl;
       }
     }
 

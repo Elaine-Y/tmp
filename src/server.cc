@@ -23,7 +23,7 @@ void RunServer() {
   const string &username = "root";
   const string &password = "123456";
   const string &db_name = "demo";
-  uint32_t max_conn_cnt = 4;  // todo
+  uint32_t max_conn_cnt = 2;  // todo
   MysqlPool db_pool(pool_name, db_server_ip, db_server_port, username, password,
                     db_name, max_conn_cnt);
   if (!db_pool.init()) {
