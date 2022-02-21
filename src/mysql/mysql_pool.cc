@@ -1,8 +1,16 @@
+//
+// Created by Elaine on 2022/2/12.
+// Here is Mysql Pool
+//
 #include "mysql_pool.h"
 
 #include <mutex>
 
 #define MIN_DB_CONN_CNT 2
+
+// static variables
+MysqlPool* MysqlPool::m_mysql_object = nullptr;
+std::mutex MysqlPool::m_object_mutex;
 
 ResultSet::ResultSet(MYSQL_RES* res) : m_res(res) {
   uint32_t num_fields = mysql_num_fields(res);
@@ -113,17 +121,29 @@ ResultSet* MysqlConn::do_query(const string& sql) {
   return result;
 }
 
-MysqlPool::MysqlPool(const string& pool_name, const string& db_server_ip,
-                     uint16_t db_server_port, const string& username,
-                     const string& password, const string& db_name,
-                     uint32_t max_conn_cnt)
-    : m_pool_name(pool_name),
-      m_db_server_ip(db_server_ip),
-      m_db_server_port(db_server_port),
-      m_username(username),
-      m_password(password),
-      m_db_name(db_name),
-      m_db_max_conn_cnt(max_conn_cnt) {
+MysqlPool* MysqlPool::get_mysql_object() {
+  if (m_mysql_object == nullptr) {
+    m_object_mutex.lock();
+    if (m_mysql_object == nullptr) {
+      m_mysql_object = new MysqlPool();
+    }
+    m_object_mutex.unlock();
+  }
+  return m_mysql_object;
+}
+
+void MysqlPool::set_parameters(const string pool_name,
+                               const string db_server_ip,
+                               const uint16_t db_server_port,
+                               const string username, const string password,
+                               const string db_name, uint32_t max_conn_cnt) {
+  m_pool_name = pool_name;
+  m_db_server_ip = db_server_ip;
+  m_db_server_port = db_server_port;
+  m_username = username;
+  m_password = password;
+  m_db_name = db_name;
+  m_db_max_conn_cnt = max_conn_cnt;
   m_db_cur_conn_cnt = MIN_DB_CONN_CNT;
 }
 

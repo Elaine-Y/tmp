@@ -1,7 +1,7 @@
 cc_library(
-    name = "query_order",
-    srcs = ["query_order.cc"],
-    hdrs = ["query_order.h"],
+    name = "query_info",
+    srcs = ["query_info.cc"],
+    hdrs = ["query_info.h"],
     deps = [
         "//proto:hello_grpc",
         "//utils:utils",
@@ -18,7 +18,7 @@ cc_binary(
     deps = [
         "//proto:hello_grpc",
         "//utils:utils",
-        ":query_order",
+        ":query_info",
         "@com_github_grpc_grpc//:grpc++",
         "@com_github_grpc_grpc//:grpc++_reflection",
     ],

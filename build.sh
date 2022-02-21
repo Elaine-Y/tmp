@@ -6,7 +6,7 @@ go mod tidy
 buf generate
 
 # 2. 启动gateway
-build run main.go
+go run main.go
 
 # 3. 编译服务
 cd ~/elaineyang/demo
